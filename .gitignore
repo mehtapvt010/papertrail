@@ -1,1 +1,127 @@
+# 📦 Node/PNPM
+node_modules/
+.pnpm/
+.pnpm-debug.log
+*.tgz
+*.log
+
+# ⚙️ CDK / AWS
+cdk.out/
+cdk.context.json
+*.pem
+*.key
+*.cer
+*.crt
+*.jks
+*.p12
+*.der
+*.zip
+*.jar
+*.iml
+
+# ⛔ Secrets
 .env
+.env.*
+.envrc
+.env.local
+.env.development
+.env.production
+.venv/
+*.env.json
+*.secret
+secrets.*
+wallet.*
+*.oracle_wallet.zip
+*.credentials
+*.pem
+__pycache__/
+*.sqlite
+*.db
+
+# 🧪 Test Output
+coverage/
+dist/
+build/
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# 🐳 Docker
+docker-compose.override.yml
+.dockerignore
+Dockerfile.local
+*.pid
+
+# ⚗️ Python (used in `backend/` and workers)
+*.egg-info/
+.mypy_cache/
+pytest_cache/
+.cache/
+.venv/
+*.ipynb
+*.pkl
+
+# 🔧 IDEs / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+Thumbs.db
+.DS_Store
+
+# 🔼 GitHub actions
+.github/token-cache/
+.github/oidc-credentials/
+
+# 📱 Expo / React Native
+.expo/
+.expo-shared/
+*.apk
+*.aab
+*.ipa
+
+# 📷 Previews / Assets
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.svg
+*.mp4
+*.mov
+*.mp3
+*.wav
+
+# 📚 Documentation
+*.pdf
+docs/_build/
+notes/
+
+# 🧪 Future extensions
+*.log.*
+*.test.ts
+*.test.js
+*.snap
+.cache/
+.eslintcache
+*.tsbuildinfo
+turbo/
+
+# 🧪 JetBrains
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# ⚙️ Terraform (if used later)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# 📄 Misc
+yarn.lock
+package-lock.json

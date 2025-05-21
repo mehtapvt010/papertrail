@@ -1,0 +1,14 @@
+{
+  "name": "papertrail",
+  "private": true,
+  "packageManager": "pnpm@9.1.2",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "test": "jest",
+    "synth": "cd infra/cdk && pnpm exec cdk synth"
+  },
+  "devDependencies": {
+    "eslint": "^9.4.0",
+    "jest": "^30.1.0"
+  }
+}
