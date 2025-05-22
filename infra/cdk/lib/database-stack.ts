@@ -2,7 +2,6 @@ import { Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 
 export interface DatabaseStackProps extends StackProps {
   vpc: ec2.IVpc;

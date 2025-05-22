@@ -22,7 +22,7 @@ export class StorageStack extends Stack {
   constructor(scope: Construct, id: string, props: StorageStackProps) {
     super(scope, id, props);
 
-    const { vpc } = props;
+    const { vpc: _vpc } = props;
 
     // KMS CMK for S3 encryption
     const key = new Key(this, 'PapertrailDocsKey', {
@@ -40,7 +40,7 @@ export class StorageStack extends Stack {
     });
 
     // Thumbnails bucket
-    const thumbDocsBucket = new Bucket(this, 'ThumbDocsBucket', {
+    const _thumbDocsBucket = new Bucket(this, 'ThumbDocsBucket', {
       bucketName: `papertrail-thumb-docs-${this.account}-${this.region}`,
       encryption: BucketEncryption.KMS,
       encryptionKey: key,

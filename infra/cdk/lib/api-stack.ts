@@ -15,7 +15,7 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const { vpc, dbCluster } = props;
+    const { vpc: _vpc, dbCluster } = props;
 
     const api = new appsync.GraphqlApi(this, 'PapertrailGraphqlApi', {
       name: 'papertrail-api',
