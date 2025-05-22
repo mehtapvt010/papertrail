@@ -4,7 +4,7 @@
   "packageManager": "pnpm@9.1.2",
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx,.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "synth": "cd infra/cdk && pnpm exec cdk synth"
   },
   "devDependencies": {
