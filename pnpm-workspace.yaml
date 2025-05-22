@@ -1,5 +1,5 @@
 packages:
-  - mobile/*
+  - mobile/my-expo-app
   - web/*
   - services/*
   - infra/*
