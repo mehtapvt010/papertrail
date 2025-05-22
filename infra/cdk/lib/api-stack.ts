@@ -15,48 +15,43 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const { vpc: _vpc, dbCluster } = props;
+    const { dbCluster } = props;
 
     const api = new appsync.GraphqlApi(this, 'PapertrailGraphqlApi', {
       name: 'papertrail-api',
       schema: appsync.SchemaFile.fromAsset(path.join(__dirname, '../graphql/schema.graphql')),
 
-      // 🔐 JWT Auth (OpenID Connect — replace with Auth0/Cognito issuer)
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.OIDC,
           openIdConnectConfig: {
-            oidcProvider: 'https://example.auth0.com/',
+            oidcProvider: 'https://example.auth0.com/', // Replace with real Auth0/Cognito issuer
             clientId: 'papertrail-client-id',
             tokenExpiryFromIssue: 3600000,
           },
         },
         additionalAuthorizationModes: [
           {
-            authorizationType: appsync.AuthorizationType.IAM
-          }
-        ]
-      },      
-
-      // 📊 CloudWatch Logs (optional but recommended)
-      logConfig: {
-        fieldLogLevel: appsync.FieldLogLevel.ALL,
-        retention: logs.RetentionDays.ONE_WEEK
+            authorizationType: appsync.AuthorizationType.IAM,
+          },
+        ],
       },
 
-      // 🔍 Enable AWS X-Ray for debugging resolvers
-      xrayEnabled: true
+      logConfig: {
+        fieldLogLevel: appsync.FieldLogLevel.ALL,
+        retention: logs.RetentionDays.ONE_WEEK,
+      },
+
+      xrayEnabled: true,
     });
 
-    // Connect Aurora Serverless cluster to AppSync
     const rdsDS = api.addRdsDataSource(
       'RdsDataSource',
       dbCluster,
       dbCluster.secret!,
-      'papertrail'
+      'papertrail',
     );
 
-    // Create dummy ping resolver
     rdsDS.createResolver('PingResolver', {
       typeName: 'Query',
       fieldName: 'ping',
@@ -70,7 +65,7 @@ export class ApiStack extends Stack {
       `),
       responseMappingTemplate: appsync.MappingTemplate.fromString(`
         $utils.toJson($utils.rds.toJsonObject($ctx.result)[0])
-      `)
+      `),
     });
   }
 }

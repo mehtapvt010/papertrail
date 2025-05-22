@@ -8,6 +8,13 @@ import { ApiStack } from '../lib/api-stack';
 
 const app = new App();
 const network = new NetworkStack(app, 'NetworkStack');
-const _storage = new StorageStack(app, 'StorageStack', { vpc: network.vpc });
+
+// Deploy StorageStack without assigning to an unused variable
+new StorageStack(app, 'StorageStack', { vpc: network.vpc });
+
 const db = new DatabaseStack(app, 'DatabaseStack', { vpc: network.vpc });
-new ApiStack(app, 'ApiStack', { vpc: network.vpc, dbCluster: db.cluster });
+
+new ApiStack(app, 'ApiStack', {
+  vpc: network.vpc,
+  dbCluster: db.cluster,
+});

@@ -6,6 +6,14 @@ export default [
   js.configs.recommended,
   ...ts.configs.recommended,
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: [
+      'node_modules/',
+      'infra/cdk/cdk.out/',
+      '**/*.config.js',
+      '**/*.config.cjs',
+      'dist/',
+      'build/',
+      'coverage/',
+    ],
   },
 ];

@@ -4,11 +4,11 @@ import { Key } from 'aws-cdk-lib/aws-kms';
 import {
   Bucket,
   BucketEncryption,
-  BlockPublicAccess
+  BlockPublicAccess,
 } from 'aws-cdk-lib/aws-s3';
 import {
   Rule,
-  EventPattern
+  EventPattern,
 } from 'aws-cdk-lib/aws-events';
 import { SnsTopic } from 'aws-cdk-lib/aws-events-targets';
 import * as sns from 'aws-cdk-lib/aws-sns';
@@ -22,48 +22,46 @@ export class StorageStack extends Stack {
   constructor(scope: Construct, id: string, props: StorageStackProps) {
     super(scope, id, props);
 
-    const { vpc: _vpc } = props;
-
-    // KMS CMK for S3 encryption
+    // 🔐 KMS key for S3 encryption
     const key = new Key(this, 'PapertrailDocsKey', {
-      enableKeyRotation: true
+      enableKeyRotation: true,
     });
 
-    // Raw documents bucket
+    // 📁 Raw documents S3 bucket
     const rawDocsBucket = new Bucket(this, 'RawDocsBucket', {
       bucketName: `papertrail-raw-docs-${this.account}-${this.region}`,
       encryption: BucketEncryption.KMS,
       encryptionKey: key,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.RETAIN,
-      versioned: true
+      versioned: true,
     });
 
-    // Thumbnails bucket
-    const _thumbDocsBucket = new Bucket(this, 'ThumbDocsBucket', {
+    // 🖼️ Thumbnails S3 bucket
+    new Bucket(this, 'ThumbDocsBucket', {
       bucketName: `papertrail-thumb-docs-${this.account}-${this.region}`,
       encryption: BucketEncryption.KMS,
       encryptionKey: key,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.RETAIN,
-      versioned: true
+      versioned: true,
     });
 
-    // SNS topic for event triggers
+    // 📣 SNS topic for future S3 triggers
     const snsTopic = new sns.Topic(this, 'S3EventTopic');
 
-    // EventBridge rule: fire on ObjectCreated in rawDocsBucket
+    // 🔔 EventBridge rule to react to new uploads
     new Rule(this, 'S3ObjectCreatedRule', {
       eventPattern: {
         source: ['aws.s3'],
         detailType: ['Object Created'],
         detail: {
           bucket: {
-            name: [rawDocsBucket.bucketName]
-          }
-        }
+            name: [rawDocsBucket.bucketName],
+          },
+        },
       } as unknown as EventPattern,
-      targets: [new SnsTopic(snsTopic)]
+      targets: [new SnsTopic(snsTopic)],
     });
   }
 }
