@@ -7,31 +7,32 @@ on:
 
 jobs:
   test-build:
-    name: Build, Lint, Test, Synth
+    name: 🧪 Build, Lint, Test, Synth
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: [20.x]
         python: ["3.12"]
     steps:
-      - name: 📦 Checkout repo
+      - name: 📦 Checkout repository
         uses: actions/checkout@v4
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: 'pnpm'
 
-      - name: ⚙️ Enable Corepack & Activate PNPM
+      - name: 🧩 Enable Corepack & Activate PNPM
         run: |
           corepack enable
           corepack prepare pnpm@9.1.2 --activate
+          pnpm --version
 
-      - name: 📦 Install dependencies
+      - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: 🧹 Lint
+      - name: 🔍 Lint
         run: pnpm run lint
 
       - name: 🧪 Test
@@ -41,7 +42,7 @@ jobs:
         run: pnpm run synth
 
   cdk-deploy-dev:
-    name: 🚀 Deploy CDK to Dev
+    name: 🚀 CDK Deploy to Dev
     needs: test-build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -49,7 +50,7 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - name: 📦 Checkout repo
+      - name: 📦 Checkout repository
         uses: actions/checkout@v4
 
       - name: 🔐 Configure AWS credentials
@@ -58,25 +59,27 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEV_ROLE }}
           aws-region: us-east-1
 
-      - name: ⚙️ Enable Corepack & Activate PNPM
+      - name: 🧩 Enable Corepack & Activate PNPM
         run: |
           corepack enable
           corepack prepare pnpm@9.1.2 --activate
+          pnpm --version
 
-      - name: 📦 Install dependencies
+      - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: 🚀 Deploy CDK
         run: cd infra/cdk && pnpm exec cdk deploy --require-approval never
 
-  expo-eas:
-    name: 🚧 Expo Deploy Stub
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "EAS not yet wired" && exit 1
+# Optional: Uncomment when Expo + Vercel deploy steps are implemented
+# expo-eas:
+#   name: 🚧 Expo Deploy Stub
+#   runs-on: ubuntu-latest
+#   steps:
+#     - run: echo "EAS not yet wired" && exit 1
 
-  vercel-deploy:
-    name: 🚧 Vercel Deploy Stub
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Vercel not yet wired" && exit 1
+# vercel-deploy:
+#   name: 🚧 Vercel Deploy Stub
+#   runs-on: ubuntu-latest
+#   steps:
+#     - run: echo "Vercel not yet wired" && exit 1
