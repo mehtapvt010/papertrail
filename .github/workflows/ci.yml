@@ -63,6 +63,7 @@ jobs:
         run: |
           corepack enable
           corepack prepare pnpm@9.1.2 --activate
+          npm install -g pnpm@9.1.2
           pnpm --version
 
       - name: 📥 Install dependencies
