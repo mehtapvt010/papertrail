@@ -7,27 +7,41 @@ on:
 
 jobs:
   test-build:
+    name: Build, Lint, Test, Synth
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: [20.x]
         python: ["3.12"]
     steps:
-      - uses: actions/checkout@v4
+      - name: 📦 Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Use Node ${{ matrix.node }}
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
-      - run: corepack enable && corepack prepare pnpm@9.1.2 --activate
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint
-      - run: pnpm run test
-      - run: pnpm run synth
+      - name: ⚙️ Enable Corepack & Activate PNPM
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.1.2 --activate
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧹 Lint
+        run: pnpm run lint
+
+      - name: 🧪 Test
+        run: pnpm run test
+
+      - name: 🏗️ CDK Synth
+        run: pnpm run synth
 
   cdk-deploy-dev:
+    name: 🚀 Deploy CDK to Dev
     needs: test-build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -35,25 +49,34 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: 📦 Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
+      - name: 🔐 Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_DEV_ROLE }}
           aws-region: us-east-1
 
-      - run: corepack enable && corepack prepare pnpm@9.1.2 --activate
-      - run: pnpm install --frozen-lockfile
-      - run: cd infra/cdk && pnpm exec cdk deploy --require-approval never
+      - name: ⚙️ Enable Corepack & Activate PNPM
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.1.2 --activate
 
-  # Stubs (fail-fast) for later deployment jobs
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🚀 Deploy CDK
+        run: cd infra/cdk && pnpm exec cdk deploy --require-approval never
+
   expo-eas:
+    name: 🚧 Expo Deploy Stub
     runs-on: ubuntu-latest
     steps:
       - run: echo "EAS not yet wired" && exit 1
 
   vercel-deploy:
+    name: 🚧 Vercel Deploy Stub
     runs-on: ubuntu-latest
     steps:
       - run: echo "Vercel not yet wired" && exit 1
