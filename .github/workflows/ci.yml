@@ -73,7 +73,7 @@ jobs:
           aws-region: us-east-1
 
       - name: 🚀 CDK Deploy
-        run: cd infra/cdk && pnpm exec cdk deploy --require-approval never
+        run: cd infra/cdk && pnpm exec cdk deploy --all --require-approval never
 
 # Optional: Uncomment when Expo + Vercel deploy steps are implemented
 # expo-eas:
