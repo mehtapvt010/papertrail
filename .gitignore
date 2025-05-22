@@ -47,6 +47,7 @@ build/
 *.pyo
 *.pyd
 *.log
+structure.md
 
 # 🐳 Docker
 docker-compose.override.yml

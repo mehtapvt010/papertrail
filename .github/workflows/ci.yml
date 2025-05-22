@@ -44,7 +44,7 @@ jobs:
     name: 🚀 Deploy CDK to Dev
     needs: test-build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
     permissions:
       id-token: write
       contents: read
