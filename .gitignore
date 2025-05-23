@@ -85,19 +85,7 @@ Thumbs.db
 *.aab
 *.ipa
 
-# 📷 Previews / Assets
-*.png
-*.jpg
-*.jpeg
-*.webp
-*.svg
-*.mp4
-*.mov
-*.mp3
-*.wav
-
 # 📚 Documentation
-*.pdf
 docs/_build/
 notes/
 

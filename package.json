@@ -5,7 +5,9 @@
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx,.js",
     "test": "jest --passWithNoTests",
-    "synth": "cd infra/cdk && pnpm exec cdk synth"
+    "synth": "cd infra/cdk && pnpm exec cdk synth",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.32.1",
@@ -14,5 +16,11 @@
     "jest": "^29.7.0",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.32.1"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~53.0.9",
+    "react": "19.0.0",
+    "react-native": "0.79.2"
   }
 }

@@ -4,39 +4,20 @@
     "slug": "papertrail-mobile",
     "version": "1.0.0",
     "sdkVersion": "53.0.0",
-    "web": {
-      "favicon": "./assets/favicon.png",
-      "bundler": "metro"
-    },
-    "experiments": {
-      "tsconfigPaths": true
-    },
-    "plugins": [],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.papertrailmobile",
       "infoPlist": {
-        "NSFaceIDUsageDescription": "We use Face ID to help you securely log in to PaperTrail AI.",
         "ITSAppUsesNonExemptEncryption": false
-      },
-      "entitlements": {
-        "com.apple.developer.biometric": [
-          "Face ID",
-          "Touch ID",
-          "Face ID",
-          "Touch ID"
-        ]
       }
     },
     "android": {
@@ -51,6 +32,13 @@
         "projectId": "8d33ff88-3b40-49d8-b6d2-d10c4c3ca52b"
       }
     },
-    "owner": "mehtapvt010"
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": []
   }
 }
