@@ -1,32 +1,34 @@
-import React, { createContext, useEffect, useState, useContext } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import React, { createContext, useEffect, useState, useContext } from "react";
+import { User, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
-type AuthCtx = {
-  user: FirebaseAuthTypes.User | null;
-  loginWithEmail: (email: string, password: string) => Promise<FirebaseAuthTypes.UserCredential>;
-  logout: () => Promise<void>;
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
 };
 
-const Ctx = createContext<AuthCtx | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+});
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const sub = auth().onUserChanged(setUser);
-    return sub;
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setLoading(false);
+    });
+    return unsubscribe;
   }, []);
 
-  const loginWithEmail = (email: string, password: string) =>
-    auth().signInWithEmailAndPassword(email.trim(), password.trim());
-
-  const logout = () => auth().signOut();
-
-  return <Ctx.Provider value={{ user, loginWithEmail, logout }}>{children}</Ctx.Provider>;
-};
-
-export const useAuth = () => {
-  const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('useAuth must be within <AuthProvider>');
-  return ctx;
+  return (
+    <AuthContext.Provider value={{ user, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

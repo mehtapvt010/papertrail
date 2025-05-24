@@ -1,17 +1,22 @@
 {
+  "cli": {
+    "version": ">=3.13.0"
+  },
   "build": {
-    "dev": {
+    "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "EXPO_PUBLIC_APPSYNC_URL": "https://s67q2ne7bzep3eg4jfvy6xmewq.appsync-api.us-east-1.amazonaws.com/graphql"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }

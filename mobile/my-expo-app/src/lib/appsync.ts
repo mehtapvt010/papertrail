@@ -1,5 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
-import auth from '@react-native-firebase/auth';
+import { auth } from './firebase';
 import * as SecureStore from 'expo-secure-store';
 
 const client = new GraphQLClient(process.env.EXPO_PUBLIC_APPSYNC_URL!, {
@@ -7,7 +7,10 @@ const client = new GraphQLClient(process.env.EXPO_PUBLIC_APPSYNC_URL!, {
 });
 
 export async function fetchAppSyncToken() {
-  const firebaseToken = await auth().currentUser?.getIdToken();
+  const user = auth.currentUser;
+  if (!user) throw new Error('No Firebase user logged in');
+
+  const idToken = await user.getIdToken();
 
   const mutation = gql`
     mutation Exchange($idToken: String!) {
@@ -19,7 +22,7 @@ export async function fetchAppSyncToken() {
   `;
 
   const { exchange } = await client.request<{ exchange: { jwt: string } }>(mutation, {
-    idToken: firebaseToken,
+    idToken,
   });
 
   await SecureStore.setItemAsync('appsyncJwt', exchange.jwt);
@@ -28,7 +31,6 @@ export async function fetchAppSyncToken() {
 
 export async function graphql<T = any>(query: string, variables?: any): Promise<T> {
   let jwt = await SecureStore.getItemAsync('appsyncJwt');
-
   if (!jwt) jwt = await fetchAppSyncToken();
 
   try {
